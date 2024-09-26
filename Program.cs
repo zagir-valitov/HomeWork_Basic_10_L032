@@ -25,7 +25,7 @@ for (int i = 1; i <= 10; i++)
     {
        File.Create(path).Dispose();
     }
-
+    /*
     path = $@"D:\OTUS\TestDir1\File_{i}.txt";
     string newPath = $@"D:\OTUS\TestDir2\File_{i}.txt";
     fileInfo = new FileInfo(path);
@@ -34,6 +34,9 @@ for (int i = 1; i <= 10; i++)
     {
         File.Copy(path, newPath, true);
     }
+    */
 }
+
+
 
 
