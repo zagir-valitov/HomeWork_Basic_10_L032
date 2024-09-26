@@ -1,15 +1,15 @@
 ﻿Console.WriteLine(" ---- Home work 10 ----\n");
 
-string path = @"D:\OTUS\TestDir1";
-DirectoryInfo directoryInfo = new DirectoryInfo(path);
+string directoryPath1 = @"D:\OTUS\TestDir1";
+DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath1);
 
 if (!directoryInfo.Exists)
 {
     directoryInfo.Create();
 }
 
-path = @"D:\OTUS\TestDir2";
-directoryInfo = new DirectoryInfo(path);
+string directoryPath2 = @"D:\OTUS\TestDir2";
+directoryInfo = new DirectoryInfo(directoryPath2);
 
 if (!directoryInfo.Exists)
 {
@@ -18,12 +18,12 @@ if (!directoryInfo.Exists)
 
 for (int i = 1; i <= 10; i++)
 {
-    path = $@"D:\OTUS\TestDir1\File_{i}.txt";
-    FileInfo fileInfo = new FileInfo(path);
+    string filePath = $@"D:\OTUS\TestDir1\File_{i}.txt";
+    FileInfo fileInfo = new FileInfo(filePath);
 
     if (!fileInfo.Exists)
     {
-       File.Create(path).Dispose();
+       File.Create(filePath).Dispose();
     }
     /*
     path = $@"D:\OTUS\TestDir1\File_{i}.txt";
@@ -35,6 +35,19 @@ for (int i = 1; i <= 10; i++)
         File.Copy(path, newPath, true);
     }
     */
+}
+
+if (Directory.Exists(directoryPath1))
+{
+    var fileList = Directory.GetFiles(directoryPath1);
+    Console.WriteLine("Files: ");
+    List<string> fileNameList = new();
+    foreach (var file in fileList)
+    {
+        FileInfo fileNameInfo = new(file);
+        fileNameList.Add(fileNameInfo.Name);
+        Console.WriteLine(fileNameInfo.Name);
+    }
 }
 
 
