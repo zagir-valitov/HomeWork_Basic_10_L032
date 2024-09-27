@@ -31,7 +31,7 @@ for (int i = 1; i <= 10; i++)
     }
 
     filePath = $@"D:\OTUS\TestDir1\File_{i}.txt";
-    string newPath = $@"D:\OTUS\TestDir2\File_{i}.txt";
+    string newPath = $@"D:\OTUS\TestDir2\File_{i + 10}.txt";
     fileInfo = new FileInfo(filePath);
 
     if (fileInfo.Exists)
@@ -45,20 +45,14 @@ if (Directory.Exists(directoryPath1))
 {
     var fileList = Directory.GetFiles(directoryPath1);
 
-    for (int i =  0; i < fileList.Length; i++)
+    for (int i = 0; i < fileList.Length; i++)
     {
-        using (FileStream fstream = new FileStream(fileList[i], FileMode.Open))
+        using (StreamWriter writer = new StreamWriter(fileList[i], false, Encoding.UTF8))
         {
-            byte[] buffer = new UTF8Encoding(true).GetBytes(new FileInfo(fileList[i]).Name);
-            await fstream.WriteAsync(buffer, 0, buffer.Length);
+            await writer.WriteLineAsync(new FileInfo(fileList[i]).Name);
+            await writer.WriteLineAsync(Convert.ToString(DateTime.Now));
         }
-
-        using (FileStream fstream = new FileStream(fileList[i], FileMode.Append))
-        {
-            byte[] buffer = new UTF8Encoding(true).GetBytes(Convert.ToString(DateTime.Now));
-            await fstream.WriteAsync(buffer, 0, buffer.Length);
-        }
-    }    
+    }
 }
 
 if (Directory.Exists(directoryPath2))
@@ -67,18 +61,51 @@ if (Directory.Exists(directoryPath2))
 
     for (int i = 0; i < fileList.Length; i++)
     {
-        using (StreamWriter writer = new StreamWriter(fileList[i], false))
+        using (StreamWriter writer = new StreamWriter(fileList[i], false, Encoding.UTF8))
         {
             await writer.WriteLineAsync(new FileInfo(fileList[i]).Name);
-        }
-
-        using (StreamWriter writer = new StreamWriter(fileList[i], true))
-        {
             await writer.WriteLineAsync(Convert.ToString(DateTime.Now));
         }
     }
 }
 
+// Step 5
+if (Directory.Exists(directoryPath1))
+{
+    Console.WriteLine(directoryPath1);
+    Console.WriteLine("------------------------------------");
+    var fileList = Directory.GetFiles(directoryPath1);
+    for (int i = 0; i < fileList.Length; i++)
+    {
+        using (StreamReader reader = new StreamReader(fileList[i]))
+        {
+            string? line;
+            while ((line = await reader.ReadLineAsync()) != null)
+            {
+                Console.Write($"{line}\t");
+            }
+            Console.WriteLine();
+        }
+    }
+    Console.WriteLine("------------------------------------\n");
+}
 
-
-
+if (Directory.Exists(directoryPath2))
+{
+    Console.WriteLine(directoryPath2);
+    Console.WriteLine("------------------------------------");
+    var fileList = Directory.GetFiles(directoryPath2);
+    for (int i = 0; i < fileList.Length; i++)
+    {
+        using (StreamReader reader = new StreamReader(fileList[i]))
+        {
+            string? line;
+            while ((line = await reader.ReadLineAsync()) != null)
+            {
+                Console.Write($"{line}\t");
+            }
+            Console.WriteLine();
+        }
+    }
+    Console.WriteLine("------------------------------------\n");
+}
