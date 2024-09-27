@@ -1,6 +1,4 @@
-﻿using System.Data;
-using System.Globalization;
-using System.Text;
+﻿using System.Text;
 
 Console.WriteLine(" ---- Home work 10 ----\n");
 
