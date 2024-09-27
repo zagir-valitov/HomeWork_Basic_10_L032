@@ -1,8 +1,10 @@
 ﻿using System.Data;
 using System.Globalization;
+using System.Text;
 
 Console.WriteLine(" ---- Home work 10 ----\n");
 
+// Step 1
 string directoryPath1 = @"D:\OTUS\TestDir1";
 DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath1);
 if (!directoryInfo.Exists)
@@ -17,6 +19,7 @@ if (!directoryInfo.Exists)
     directoryInfo.Create();
 }
 
+// Step 2
 for (int i = 1; i <= 10; i++)
 {
     string filePath = $@"D:\OTUS\TestDir1\File_{i}.txt";
@@ -37,37 +40,25 @@ for (int i = 1; i <= 10; i++)
     }    
 }
 
-
-
+// Step 3, 4
 if (Directory.Exists(directoryPath1))
 {
     var fileList = Directory.GetFiles(directoryPath1);
 
     for (int i =  0; i < fileList.Length; i++)
     {
-        using (StreamWriter writer = new StreamWriter(fileList[i], false))
-        { 
-            await writer.WriteLineAsync(new FileInfo(fileList[i]).Name);
-        }
-
-        using (StreamWriter writer = new StreamWriter(fileList[i], true))
+        using (FileStream fstream = new FileStream(fileList[i], FileMode.Open))
         {
-            await writer.WriteLineAsync(Convert.ToString(DateTime.Now));
+            byte[] buffer = new UTF8Encoding(true).GetBytes(new FileInfo(fileList[i]).Name);
+            await fstream.WriteAsync(buffer, 0, buffer.Length);
         }
-    }
 
-    /*
-    Console.WriteLine($"Files: {fileList.Length}\n");
-
-    List<string> fileNameList = new();
-    foreach (var file in fileList)
-    {
-        FileInfo fileNameInfo = new(file);
-        fileNameList.Add(fileNameInfo.Name);
-        Console.WriteLine(fileNameInfo);
-
-    }
-    */
+        using (FileStream fstream = new FileStream(fileList[i], FileMode.Append))
+        {
+            byte[] buffer = new UTF8Encoding(true).GetBytes(Convert.ToString(DateTime.Now));
+            await fstream.WriteAsync(buffer, 0, buffer.Length);
+        }
+    }    
 }
 
 if (Directory.Exists(directoryPath2))
@@ -87,5 +78,7 @@ if (Directory.Exists(directoryPath2))
         }
     }
 }
+
+
 
 
